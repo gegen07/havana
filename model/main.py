@@ -9,41 +9,62 @@ from process import Processing
 
 class MainPoI:
     def __init__(self):
-        pass
+        self.processing = Processing()
 
     def start(self):
-        base_dir = "gowalla/"
+        base_dir = "../pre-processing/gowalla"
         dataset_name = "gowalla"
 
         adjacency_matrix_filename = (
-            "gowalla/adjacency_matrix_not_directed_48_7_categories_US.csv"
+            "adjacency_matrix_not_directed_48_7_categories_US.csv"
         )
+        adjacency_matrix_filename = os.path.join(base_dir, adjacency_matrix_filename)
+
         adjacency_matrix_week_filename = (
-            "gowalla/adjacency_matrix_weekday_not_directed_48_7_categories_US.csv"
+            "adjacency_matrix_weekday_not_directed_48_7_categories_US.csv"
         )
+        adjacency_matrix_week_filename = os.path.join(
+            base_dir, adjacency_matrix_week_filename
+        )
+
         adjacency_matrix_weekend_filename = (
-            "gowalla/adjacency_matrix_weekend_not_directed_48_7_categories_US.csv"
+            "adjacency_matrix_weekend_not_directed_48_7_categories_US.csv"
         )
-        temporal_matrix_filename = (
-            "gowalla/features_matrix_not_directed_48_7_categories_US.csv"
+        adjacency_matrix_weekend_filename = os.path.join(
+            base_dir, adjacency_matrix_weekend_filename
         )
+
+        temporal_matrix_filename = "features_matrix_not_directed_48_7_categories_US.csv"
+        temporal_matrix_filename = os.path.join(base_dir, temporal_matrix_filename)
+
         temporal_matrix_week_filename = (
-            "gowalla/features_matrix_weekday_not_directed_48_7_categories_US.csv"
+            "features_matrix_weekday_not_directed_48_7_categories_US.csv"
         )
+        temporal_matrix_week_filename = os.path.join(
+            base_dir, temporal_matrix_week_filename
+        )
+
         temporal_matrix_weekend_filename = (
-            "gowalla/features_matrix_weekend_not_directed_48_7_categories_US.csv"
+            "features_matrix_weekend_not_directed_48_7_categories_US.csv"
         )
-        distance_matrix_filename = (
-            "gowalla/distance_matrix_not_directed_48_7_categories_US.csv"
+        temporal_matrix_weekend_filename = os.path.join(
+            base_dir, temporal_matrix_weekend_filename
         )
-        duration_matrix_filename = (
-            "gowalla/duration_matrix_not_directed_48_7_categories_US.csv"
-        )
-        location_location_filename = (
-            "gowalla/location_location_pmi_matrix_7_categories_US.npz"
-        )
-        location_time_filename = "gowalla/location_time_pmi_matrix_7_categories_US.csv"
-        int_to_locationid_filename = "gowalla/int_to_locationid_7_categories_US.csv"
+
+        distance_matrix_filename = "distance_matrix_not_directed_48_7_categories_US.csv"
+        distance_matrix_filename = os.path.join(base_dir, distance_matrix_filename)
+
+        duration_matrix_filename = "duration_matrix_not_directed_48_7_categories_US.csv"
+        duration_matrix_filename = os.path.join(base_dir, duration_matrix_filename)
+
+        location_location_filename = "location_location_pmi_matrix_7_categories_US.npz"
+        location_location_filename = os.path.join(base_dir, location_location_filename)
+
+        location_time_filename = "location_time_pmi_matrix_7_categories_US.csv"
+        location_time_filename = os.path.join(base_dir, location_time_filename)
+
+        int_to_locationid_filename = "int_to_locationid_7_categories_US.csv"
+        int_to_locationid_filename = os.path.join(base_dir, int_to_locationid_filename)
 
         country = "US"
         version = "normal"
@@ -69,68 +90,64 @@ class MainPoI:
             for i in range(len(list(self.GOWALLA_7_CATEGORIES)))
         }
 
-
         output_dir = "./output/" + dataset_name + "/"
 
         if os.path.exists(output_dir):
             os.path.mkdir(output_dir)
 
-        base_report = (
-            "report_7_int_categories",
-            {
-                "0": {"precision": [], "recall": [], "f1-score": [], "support": []},
-                "1": {"precision": [], "recall": [], "f1-score": [], "support": []},
-                "2": {"precision": [], "recall": [], "f1-score": [], "support": []},
-                "3": {"precision": [], "recall": [], "f1-score": [], "support": []},
-                "4": {"precision": [], "recall": [], "f1-score": [], "support": []},
-                "5": {"precision": [], "recall": [], "f1-score": [], "support": []},
-                "6": {"precision": [], "recall": [], "f1-score": [], "support": []},
-                "accuracy": [],
-                "macro avg": {
-                    "precision": [],
-                    "recall": [],
-                    "f1-score": [],
-                    "support": [],
-                },
-                "weighted avg": {
-                    "precision": [],
-                    "recall": [],
-                    "f1-score": [],
-                    "support": [],
-                },
+        base_report = {
+            "0": {"precision": [], "recall": [], "f1-score": [], "support": []},
+            "1": {"precision": [], "recall": [], "f1-score": [], "support": []},
+            "2": {"precision": [], "recall": [], "f1-score": [], "support": []},
+            "3": {"precision": [], "recall": [], "f1-score": [], "support": []},
+            "4": {"precision": [], "recall": [], "f1-score": [], "support": []},
+            "5": {"precision": [], "recall": [], "f1-score": [], "support": []},
+            "6": {"precision": [], "recall": [], "f1-score": [], "support": []},
+            "accuracy": [],
+            "macro avg": {
+                "precision": [],
+                "recall": [],
+                "f1-score": [],
+                "support": [],
             },
-            "report",
+            "weighted avg": {
+                "precision": [],
+                "recall": [],
+                "f1-score": [],
+                "support": [],
+            },
+        }
+
+        adjacency_df = pd.read_csv(adjacency_matrix_filename).drop_duplicates(
+            subset=["user_id"]
+        )
+        temporal_df = pd.read_csv(temporal_matrix_filename).drop_duplicates(
+            subset=["user_id"]
+        )
+        distance_df = pd.read_csv(distance_matrix_filename).drop_duplicates(
+            subset=["user_id"]
+        )
+        duration_df = pd.read_csv(duration_matrix_filename).drop_duplicates(
+            subset=["user_id"]
         )
 
-        adjacency_df = pd.read_csv(adjacency_matrix_filename).drop_duplicates(subset=['user_id'])
-        temporal_df = pd.read_csv(temporal_matrix_filename).drop_duplicates(subset=['user_id'])
-        distance_df = pd.read_csv(distance_matrix_filename).drop_duplicates(subset=['user_id'])
-        duration_df = pd.read_csv(duration_matrix_filename).drop_duplicates(subset=['user_id'])
-
-        adjacency_week_df = pd.read_csv(adjacency_matrix_week_filename).drop_duplicates(subset=['user_id'])
-        temporal_week_df = pd.read_csv(temporal_matrix_week_filename).drop_duplicates(subset=['user_id'])
-
-        adjacency_weekend_df = pd.read_csv(adjacency_matrix_weekend_filename).drop_duplicates(subset=['user_id'])
-        temporal_weekend_df = pd.read_csv(temporal_matrix_weekend_filename).drop_duplicates(subset=['user_id'])
-
-        print("\nVerificação de matrizes\n")
-        self.matrices_verification(
-            [
-                adjacency_df,
-                temporal_df,
-                adjacency_week_df,
-                temporal_week_df,
-                adjacency_weekend_df,
-                temporal_weekend_df,
-                distance_df,
-                duration_df,
-            ]
+        adjacency_week_df = pd.read_csv(adjacency_matrix_week_filename).drop_duplicates(
+            subset=["user_id"]
         )
+        temporal_week_df = pd.read_csv(temporal_matrix_week_filename).drop_duplicates(
+            subset=["user_id"]
+        )
+
+        adjacency_weekend_df = pd.read_csv(
+            adjacency_matrix_weekend_filename
+        ).drop_duplicates(subset=["user_id"])
+        temporal_weekend_df = pd.read_csv(
+            temporal_matrix_weekend_filename
+        ).drop_duplicates(subset=["user_id"])
 
         location_location = sparse.load_npz(location_location_filename)
         location_time = pd.read_csv(location_time_filename)
         int_to_locationid = pd.read_csv(int_to_locationid_filename)
-
 
         inputs = {
             "all_week": {
@@ -164,9 +181,7 @@ class MainPoI:
             location_location_df,
             selected_users,
             df_selected_users_visited_locations,
-        ) = Processing.poi_gnn_adjacency_preprocessing(
-            inputs, max_size_matrices, True, True, 7, dataset_name
-        )
+        ) = self.processing.poi_gnn_adjacency_preprocessing(inputs, max_size_matrices)
 
         selected_users = pd.DataFrame({"selected_users": selected_users})
 
@@ -194,29 +209,22 @@ class MainPoI:
 
         usuarios = len(adjacency_df)
 
-        folds, class_weight = Processing.k_fold_split_train_test(
+        folds = self.processing.k_fold_split_train_test(
             max_size_matrices, inputs, n_splits, "all_week"
         )
 
-        (
-            folds_week,
-            class_weight_week,
-        ) = Processing.k_fold_split_train_test(
+        folds_week = self.processing.k_fold_split_train_test(
             max_size_matrices, inputs, n_splits, "week"
         )
 
-        (
-            folds_weekend,
-            class_weight_weekend,
-        ) = Processing.k_fold_split_train_test(
+        folds_weekend = self.processing.k_fold_split_train_test(
             max_size_matrices, inputs, n_splits, "weekend"
         )
 
-        print("\nclass weight: ", class_weight)
         inputs_folds = {
-            "all_week": {"folds": folds, "class_weight": class_weight},
-            "week": {"folds": folds_week, "class_weight": class_weight_week},
-            "weekend": {"folds": folds_weekend, "class_weight": class_weight_weekend},
+            "all_week": {"folds": folds},
+            "week": {"folds": folds_week},
+            "weekend": {"folds": folds_weekend},
         }
 
         print("\nTreino\n")
@@ -224,65 +232,61 @@ class MainPoI:
             folds_histories,
             base_report,
             model,
-        ) = Processing.k_fold_with_replication_train_and_evaluate_model(
+        ) = self.processing.k_fold_with_replication_train_and_evaluate_model(
             inputs_folds,
             n_replications,
             max_size_matrices,
             max_size_paths,
             base_report,
             epochs,
-            class_weight,
             country,
             version,
             output_dir,
         )
 
-        selected_users.to_csv(output_dir + "selected_users.csv", index=False)
         print("\nbase: ", base_dir)
-        base_report = Processing.preprocess_report(
-            base_report, int_to_category
-        )
+        base_report = self.processing.preprocess_report(base_report, int_to_category)
         # self.poi_categorization_loader.plot_history_metrics(folds_histories, base_report, output_dir)
         self._save_report_to_csv(
             output_dir, base_report, n_splits, n_replications, usuarios
         )
         # self.poi_categorization_loader.save_model_and_weights(model, output_dir, n_splits, n_replications)
         print("\nUsuarios processados: ", usuarios)
-    
-    def _save_report_to_csv(self, output_dir, report, n_folds, n_replications, usuarios):
 
+    def _save_report_to_csv(
+        self, output_dir, report, n_folds, n_replications, usuarios
+    ):
         precision_dict = {}
         recall_dict = {}
         fscore_dict = {}
-        column_size = n_folds*n_replications
+        column_size = n_folds * n_replications
         for key in report:
-            if key == 'accuracy':
-                column = 'accuracy'
+            if key == "accuracy":
+                column = "accuracy"
                 fscore_dict[column] = report[key]
                 continue
-            elif key == 'recall' or key == 'f1-score' \
-                    or key == 'support':
+            elif key == "recall" or key == "f1-score" or key == "support":
                 continue
-            if key == 'macro avg' or key == 'weighted avg':
+            if key == "macro avg" or key == "weighted avg":
                 column = key
-                fscore_dict[column] = report[key]['f1-score']
+                fscore_dict[column] = report[key]["f1-score"]
                 continue
             fscore_column = key
-            fscore_column_data = report[key]['f1-score']
+            fscore_column_data = report[key]["f1-score"]
             if len(fscore_column_data) < column_size:
                 while len(fscore_column_data) < column_size:
                     fscore_column_data.append(np.nan)
             fscore_dict[fscore_column] = fscore_column_data
 
             precision_column = key
-            precision_column_data = report[key]['precision']
+            precision_column_data = report[key]["precision"]
             if len(precision_column_data) < column_size:
                 while len(precision_column_data) < column_size:
                     precision_column_data.append(np.nan)
             precision_dict[precision_column] = precision_column_data
 
             recall_column = key
-            recall_column_data = report[key]['recall']
+            recall_column_data = report[key]["recall"]
             if len(recall_column_data) < column_size:
                 while len(recall_column_data) < column_size:
                     recall_column_data.append(np.nan)
@@ -290,7 +294,9 @@ class MainPoI:
 
         precision = pd.DataFrame(precision_dict)
         print("Métricas precision: \n", precision)
-        output_dir = output_dir + str(n_folds) + "_folds/" + str(n_replications) + "_replications/"
+        output_dir = (
+            "metrics/"
+        )
 
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         precision.to_csv(output_dir + "precision.csv", index_label=False, index=False)
@@ -303,3 +309,6 @@ class MainPoI:
         print("Métricas fscore: \n", fscore)
         fscore.to_csv(output_dir + "fscore.csv", index_label=False, index=False)
 
+
+if __name__ == "__main__":
+    MainPoI().start()

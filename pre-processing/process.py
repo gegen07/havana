@@ -54,14 +54,14 @@ class MatrixGeneration:
         visited_location_ids_real = []
         n_pois = len(user_checkin[locationid_column].unique().tolist())
 
-        adjacency_matrix = np.zeros((n_pois, n_pois))
-        adjacency_weekday_matrix = np.zeros((n_pois, n_pois))
-        adjacency_weekend_matrix = np.zeros((n_pois, n_pois))
-        temporal_weekday_matrix = np.zeros((n_pois, 24))
-        temporal_weekend_matrix = np.zeros((n_pois, 24))
-        distance_matrix = np.zeros((n_pois, n_pois))
+        adjacency_matrix = [[0 for _ in range(n_pois)] for _ in range(n_pois)]
+        adjacency_weekday_matrix = [[0 for _ in range(n_pois)] for _ in range(n_pois)]
+        adjacency_weekend_matrix = [[0 for _ in range(n_pois)] for _ in range(n_pois)]
+        temporal_weekday_matrix = [[0 for _ in range(24)] for _ in range(n_pois)]
+        temporal_weekend_matrix = [[0 for _ in range(24)] for _ in range(n_pois)]
+        distance_matrix = [[0 for _ in range(n_pois)] for _ in range(n_pois)]
         duration_matrix = [[[] for i in range(n_pois)] for j in range(n_pois)]
-        temporal_matrix = np.zeros((n_pois, 48))
+        temporal_matrix = [[0 for _ in range(48)] for _ in range(n_pois)]
 
         categories_list = [-1 for _ in range(n_pois)]
 
@@ -306,7 +306,10 @@ class MatrixGeneration:
     
     def _save_matrices_csv(self, files, file_names):
         for i in range(len(files)):
-            files[i].to_csv(file_names[i], index=False)
+            h=False
+            if not os.path.exists(file_names[i]):
+                h=True
+            files[i].to_csv(file_names[i], mode='a', index=False, header=h)
 
     def _create_location_coocurrency_matrix(
         self,

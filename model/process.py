@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import json
+from ast import literal_eval
 
 import spektral.layers
 from sklearn.model_selection import KFold
@@ -24,8 +25,8 @@ from util import (
 
 
 class Processing:
-    def __init__(self, dataset_name):
-        self.dataset_name = dataset_name
+    def __init__(self):
+        pass
 
     def read_matrix(
         self,
@@ -190,11 +191,6 @@ class Processing:
         self,
         inputs,
         max_size_matrices,
-        week,
-        weekend,
-        num_categories,
-        dataset_name,
-        model_name="poi_gnn",
     ):
         matrices_list = []
         temporal_matrices_list = []
@@ -287,7 +283,6 @@ class Processing:
                 user_matrices_weekend,
                 user_category,
                 max_size_matrices,
-                dataset_name,
             )
 
             """feature"""
@@ -312,7 +307,7 @@ class Processing:
             user_duration_matrix = np.array(user_duration_matrix)
             for j in range(number_of_matrices):
                 idx = idxs[j]
-                matrices_list.append(sk.layers.ARMAConv.preprocess(user_matrices[i]))
+                matrices_list.append(sk.layers.ARMAConv.preprocess(user_matrices[j]))
                 matrices_week_list.append(
                     sk.layers.ARMAConv.preprocess(user_matrices_week[j])
                 )
@@ -422,10 +417,9 @@ class Processing:
         kf = KFold(n_splits=n_splits, shuffle=True, random_state=0)
 
         folds = []
-        classes_weights = []
         print(len(adjacency_list))
         for train_indexes, test_indexes in kf.split(adjacency_list):
-            fold, class_weight = self._split_train_test(
+            fold = self._split_train_test(
                 k,
                 model_name,
                 adjacency_list,
@@ -439,11 +433,10 @@ class Processing:
                 test_indexes,
             )
             folds.append(fold)
-            classes_weights.append(class_weight)
             if skip:
                 break
 
-        return folds, classes_weights
+        return folds
 
     def _split_train_test(
         self,
@@ -662,8 +655,18 @@ class Processing:
             location_location_train.shape,
         )
 
+        params = {
+            "num_classes": num_classes,
+            "max_size_matrices": max_size,
+            "max_size_sequence": max_size_sequence,
+            "dropout": 0.5,
+            "dropout_skip": 0.5,
+            "num_classes": num_classes,
+            "features_num_columns": self.features_num_columns,
+        }
+
         model = HAVANA(
-            num_classes, max_size, max_size_sequence, self.features_num_columns
+            params
         ).build(seed=seed)
         batch = max_size * 2
 
