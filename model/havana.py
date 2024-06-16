@@ -231,7 +231,7 @@ class HAVANA:
         att = Attention()([c1, c1])
         out = Concatenate()([c1, att])
         out = Dense(50, activation="relu")(out)
-        print(out)
+        # print(out)
         out1 = Dense(self.num_classes, activation="softmax")(out)
 
         model = Model(

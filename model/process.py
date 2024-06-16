@@ -417,7 +417,7 @@ class Processing:
         kf = KFold(n_splits=n_splits, shuffle=True, random_state=0)
 
         folds = []
-        print(len(adjacency_list))
+        # print(len(adjacency_list))
         for train_indexes, test_indexes in kf.split(adjacency_list):
             fold = self._split_train_test(
                 k,
@@ -455,7 +455,7 @@ class Processing:
         # 'average', 'cv', 'median', 'radius', 'label'
         adjacency_list_train = adjacency_list[train_indexes]
         user_categories_train = user_categories[train_indexes]
-        print(len(user_categories_train))
+        # print(len(user_categories_train))
         # input("pause")
 
         temporal_list_train = temporal_list[train_indexes]
@@ -629,31 +629,31 @@ class Processing:
         num_classes = max(y_train.flatten()) + 1
         max_size = max_size_matrices
         lr = 0.001
-        print("\nQuantidade de classes: ", num_classes)
-        print("\nTamanho maximo", max_size_matrices)
-        print(
-            "\nTamanho das matrizes de treino: ",
-            adjacency_train.shape,
-            temporal_train.shape,
-            adjacency_week_train.shape,
-            temporal_train_week.shape,
-            distance_train.shape,
-            duration_train.shape,
-            location_time_train.shape,
-            location_location_train.shape,
-        )
+        # print("\nQuantidade de classes: ", num_classes)
+        # print("\nTamanho maximo", max_size_matrices)
+        # print(
+        #     "\nTamanho das matrizes de treino: ",
+        #     adjacency_train.shape,
+        #     temporal_train.shape,
+        #     adjacency_week_train.shape,
+        #     temporal_train_week.shape,
+        #     distance_train.shape,
+        #     duration_train.shape,
+        #     location_time_train.shape,
+        #     location_location_train.shape,
+        # )
 
-        print(
-            "\nTamanho das matrizes de teste: ",
-            adjacency_test.shape,
-            temporal_test.shape,
-            adjacency_test_week.shape,
-            temporal_test_week.shape,
-            distance_test.shape,
-            duration_test.shape,
-            location_time_test.shape,
-            location_location_train.shape,
-        )
+        # print(
+        #     "\nTamanho das matrizes de teste: ",
+        #     adjacency_test.shape,
+        #     temporal_test.shape,
+        #     adjacency_test_week.shape,
+        #     temporal_test_week.shape,
+        #     distance_test.shape,
+        #     duration_test.shape,
+        #     location_time_test.shape,
+        #     location_location_train.shape,
+        # )
 
         params = {
             "num_classes": num_classes,
@@ -670,7 +670,7 @@ class Processing:
         ).build(seed=seed)
         batch = max_size * 2
 
-        print("\nTamanho do batch: ", batch)
+        # print("\nTamanho do batch: ", batch)
 
         input_train = [
             adjacency_train,
@@ -708,7 +708,7 @@ class Processing:
         if not (
             compare1.all() and compare2.all() and compare3.all() and compare4.all()
         ):
-            print("\nListas difernetes de categorias\n")
+            # print("\nListas difernetes de categorias\n")
             exit()
 
         model.compile(
@@ -719,7 +719,7 @@ class Processing:
         print(model.summary())
         y_train = np_utils.to_categorical(y_train, num_classes=num_classes)
         y_test = np_utils.to_categorical(y_test, num_classes=num_classes)
-        print(y_test)
+        # print(y_test)
 
         hi = model.fit(
             x=input_train,
