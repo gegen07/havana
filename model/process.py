@@ -496,7 +496,7 @@ class Processing:
         if len(distance_list) > 0:
             return (
                 adjacency_list_train,
-                user_categories_train,
+                user_categories_train,  
                 temporal_list_train,
                 distance_list_train,
                 duration_list_train,
@@ -716,8 +716,11 @@ class Processing:
             loss=["categorical_crossentropy"],
             weighted_metrics=[tf.keras.metrics.CategoricalAccuracy(name="acc")],
         )
+        print(model.summary())
         y_train = np_utils.to_categorical(y_train, num_classes=num_classes)
         y_test = np_utils.to_categorical(y_test, num_classes=num_classes)
+        print(y_test)
+
         hi = model.fit(
             x=input_train,
             y=y_train,
@@ -727,7 +730,6 @@ class Processing:
             shuffle=False,  # Shuffling data means shuffling the whole graph
             callbacks=[EarlyStopping(patience=100, restore_best_weights=True)],
         )
-
         h = hi.history
         y_predict_location = model.predict(input_test, batch_size=batch)
 

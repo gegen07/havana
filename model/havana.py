@@ -231,7 +231,8 @@ class HAVANA:
         att = Attention()([c1, c1])
         out = Concatenate()([c1, att])
         out = Dense(50, activation="relu")(out)
-        out = Dense(self.num_classes, activation="softmax")(out)
+        print(out)
+        out1 = Dense(self.num_classes, activation="softmax")(out)
 
         model = Model(
             inputs=[
@@ -246,7 +247,7 @@ class HAVANA:
                 Location_time_input,
                 Location_location_input,
             ],
-            outputs=[out],
+            outputs=[out1],
         )
 
         return model
