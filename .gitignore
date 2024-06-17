@@ -1,0 +1,15 @@
+*.csv
+.python-env/*
+.vscode
+output/
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pyo
+*.png
+*.h5
+*.npz
+*.xml
+checkins_data/
+mlruns/
+gowalla/
