@@ -2,13 +2,9 @@
 
 ## Description
 
-This repository presents PGC-NN: a graph neural network able to semantically enriching Points of Interest (POIs) according to spatiotemporal data.
-
-This approach is a piece of a more complete work [1], removed from the original repository [2].
+This repository presents HAVANA: a graph neural network able to semantically enriching Points of Interest (POIs) according to spatiotemporal data.
 
 ## Data
-
-To generate the matrices specified in [1], see details in [matrix generation documentation](docs/matrix_generation.md).
 
 <span style="color: red;">**OBS: The Data was removed to not overload the repository.**</span>
 
