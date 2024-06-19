@@ -38,7 +38,6 @@ To execute this project, first you need to create and activate your virtual envi
     * `$ pip install -r requirements.txt`
 
 5. Execute
-    * see [info](docs/info.md) about pgc-nn execution (pt-br)
     * `python main.py --job <job> --state <state> [--model <model>] [--base_line <base_line>] [--base_line_general <base_line_general>]`
     * Arguments
         * --job (required): Specifies the job to be executed. Valid options are preprocess for preprocessing and categorize for categorization.
