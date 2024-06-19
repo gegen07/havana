@@ -19,8 +19,6 @@ This repository presents HAVANA: a graph neural network able to semantically enr
 
 ### Execution
 
-After generate the matrices, you need to run 'processing_data.ipynb' notebook in 'gowalla/processed/' folder to reduce the original dataset and favor tests execution. You will need also to comment line 12 and uncomment line 11 in 'main.py' file.
-
 To execute this project, first you need to create and activate your virtual environment. The step-by-step is:
 
 <span style="color: red;">**OBS: The follow step-by-step was created to use in Linux Operation System.**</span>
