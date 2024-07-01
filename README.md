@@ -63,14 +63,3 @@ To execute this project, first you need to create and activate your virtual envi
 
 3. **Categorization Job**
    - After successfully completing the preprocessing job and ensuring the presence of all matrices in `gowalla` directory, you can proceed with the categorization job following the instructions provided above.
-
-
-***
-
-## References
-
-[1] Cláudio G.S. Capanema, et al. Combining recurrent and Graph Neural Networks to predict the next place’s category. Ad Hoc Netw. 138, C (Jan 2023). https://doi.org/10.1016/j.adhoc.2022.103016
-
-[2] CLAUDIOCAPANEMA. poi_gnn. Disponível em: <https://github.com/claudiocapanema/poi_gnn>.
-
-***
